@@ -7,7 +7,6 @@ import type { DashboardPayload } from "@/app/api/dashboard/route";
 
 const X_URL = "https://x.com/WazzupEquity";
 const SOLSCAN_TOKEN_URL = `https://solscan.io/token/${TOKEN.mint}`;
-const JUPITER_SWAP_URL = `https://jup.ag/swap/SOL-${TOKEN.mint}`;
 
 export const revalidate = 20;
 
@@ -42,9 +41,6 @@ export default async function Home() {
               <LinkPill href={SOLSCAN_TOKEN_URL} label="Solscan">
                 <ExternalLink className="h-3 w-3" />
               </LinkPill>
-              <LinkPill href={JUPITER_SWAP_URL} label="Buy on Jupiter">
-                <ExternalLink className="h-3 w-3" />
-              </LinkPill>
             </div>
           </div>
           <div className="flex justify-end">
@@ -69,19 +65,34 @@ export default async function Home() {
           </>
         )}
 
-        <footer className="border-t border-border pt-6 flex items-center justify-between text-xs text-muted flex-wrap gap-3">
-          <span className="pixel-font">Wazzup Equity · Solana</span>
-          <div className="flex items-center gap-4">
-            <a href={X_URL} target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">
-              X
-            </a>
-            <a href={SOLSCAN_TOKEN_URL} target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">
-              Solscan
-            </a>
-            <a href={JUPITER_SWAP_URL} target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">
-              Jupiter
-            </a>
+        <footer className="border-t border-border pt-6 flex flex-col gap-6">
+          <div className="flex items-center justify-between text-xs text-muted flex-wrap gap-3">
+            <span className="pixel-font">Wazzup Equity · Solana</span>
+            <div className="flex items-center gap-4">
+              <a
+                href={X_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-foreground transition-colors"
+              >
+                X
+              </a>
+              <a
+                href={SOLSCAN_TOKEN_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-foreground transition-colors"
+              >
+                Solscan
+              </a>
+            </div>
           </div>
+          <p className="text-[11px] leading-relaxed text-muted max-w-4xl">
+            <span className="pixel-font text-foreground">Disclaimer.</span> Nothing on this page, or
+            any page including Wazzup X and any other correspondence from Wazzup in any capacity is
+            a solicitation to buy anything. No financial advice is being given. Do your own
+            research.
+          </p>
         </footer>
       </div>
     </div>
