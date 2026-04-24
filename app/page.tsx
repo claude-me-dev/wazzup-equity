@@ -1,9 +1,8 @@
-import { headers } from "next/headers";
 import { ExternalLink } from "lucide-react";
 import { HoldingsGrid } from "@/components/HoldingsGrid";
 import { SupplyHeader } from "@/components/SupplyHeader";
 import { TOKEN } from "@/lib/config";
-import type { DashboardPayload } from "@/app/api/dashboard/route";
+import { getDashboardPayload, type DashboardPayload } from "@/lib/dashboard";
 
 const X_URL = "https://x.com/WazzupEquity";
 const SOLSCAN_TOKEN_URL = `https://solscan.io/token/${TOKEN.mint}`;
@@ -11,11 +10,11 @@ const SOLSCAN_TOKEN_URL = `https://solscan.io/token/${TOKEN.mint}`;
 export const revalidate = 20;
 
 async function getDashboard(): Promise<DashboardPayload | { error: string }> {
-  const h = await headers();
-  const host = h.get("x-forwarded-host") ?? h.get("host") ?? "localhost:3000";
-  const proto = h.get("x-forwarded-proto") ?? "http";
-  const res = await fetch(`${proto}://${host}/api/dashboard`, { next: { revalidate: 20 } });
-  return res.json();
+  try {
+    return await getDashboardPayload();
+  } catch (err) {
+    return { error: err instanceof Error ? err.message : "unknown error" };
+  }
 }
 
 export default async function Home() {
