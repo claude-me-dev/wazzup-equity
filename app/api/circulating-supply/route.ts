@@ -8,7 +8,7 @@ export const revalidate = 60;
 
 export async function GET() {
   try {
-    const value = await cached("circulating-supply", 60_000, async () => {
+    const circulatingSupply = await cached("circulating-supply", 60_000, async () => {
       const [supply, lockedBalances] = await Promise.all([
         getMintSupply(),
         getManyWalletBalances(LOCKED_WALLETS.map((w) => w.address)),
@@ -16,15 +16,17 @@ export async function GET() {
       const lockedTotal = Object.values(lockedBalances).reduce((a, b) => a + b, 0);
       return supply.ui - lockedTotal;
     });
-    return new NextResponse(value.toFixed(9), {
-      status: 200,
-      headers: {
-        "Content-Type": "text/plain; charset=utf-8",
-        "Cache-Control": "public, s-maxage=60, stale-while-revalidate=300",
+    return NextResponse.json(
+      { circulatingSupply },
+      {
+        headers: {
+          "Cache-Control": "public, s-maxage=60, stale-while-revalidate=300",
+          "Access-Control-Allow-Origin": "*",
+        },
       },
-    });
+    );
   } catch (err) {
     const message = err instanceof Error ? err.message : "unknown error";
-    return new NextResponse(`error: ${message}`, { status: 500 });
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
